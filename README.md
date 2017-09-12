@@ -5,6 +5,7 @@ This guide provides a basic deployment of a Consul cluster in Azure. This is a h
 * Creates a virtual network, one public subnet, and three private subnets
 * Creates a publically-accessible jumphost for SSH access in the public subnet
 * Creates one virtual machine in each private subnet using a custom managed image with Consul installed and configured
+    * We'll use Packer to create these base images
 * Uses Consul's cloud auto-join to connect the three instances into one Consul cluster
 
 ## Deployment Prerequisites
@@ -14,16 +15,22 @@ This guide provides a basic deployment of a Consul cluster in Azure. This is a h
 2. Certain steps will require entering commands through the Azure CLI. You can find out more about installing it [here](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli).
 
 3. Create Azure API Credentials: set up the main Service Principal that will be used for Packer and Terraform:
-    * [https://www.terraform.io/docs/providers/azurerm/index.html]()
+    * https://www.terraform.io/docs/providers/azurerm/index.html
     * The above steps will create a Service Principal with the [Contributor](https://docs.microsoft.com/en-us/azure/active-directory/role-based-access-built-in-roles#contributor) role in your Azure subscription
 
-4. `export` environment variables for the main (Packer/Terraform) Service Principal. For example, create a `.sh` file with the following values (obtained from step `1` above):
+4. `export` environment variables for the main (Packer/Terraform) Service Principal. For example, create a `env.sh` file with the following values (obtained from step `1` above):
 
     ```
     export ARM_SUBSCRIPTION_ID="xxxxxxxx-yyyy-zzzz-xxxx-yyyyyyyyyyyy"
     export ARM_CLIENT_ID="xxxxxxxx-yyyy-zzzz-xxxx-yyyyyyyyyyyy"
     export ARM_CLIENT_SECRET="xxxxxxxx-yyyy-zzzz-xxxx-yyyyyyyyyyyy"
     export ARM_TENANT_ID="xxxxxxxx-yyyy-zzzz-xxxx-yyyyyyyyyyyy"
+    ```
+
+    You can then source these environment variables as such:
+    
+    ```
+    $ source env.sh
     ```
 
 5. Finally, create a read-only Azure Service Principal (using the Azure CLI) that will be used to perform the Consul auto-join (make note of these values as you will use them later in this guide):
@@ -42,7 +49,7 @@ First, you will need to create a Resource Group in your Azure subscription in wh
 
 On your client machine:
 
-1. Install Packer. See [https://www.packer.io/docs/install/index.html]() for more details.
+1. Install Packer. See https://www.packer.io/docs/install/index.html for more details.
 
 2. `git clone` the `tdsacilowski/azure-consul` repository
 
