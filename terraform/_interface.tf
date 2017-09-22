@@ -21,10 +21,6 @@ variable "auto_join_tenant_id" {
   type = "string"
 }
 
-variable "cluster_size" {
-  description = "Number of instances to launch in the cluster"
-}
-
 # Optional variables
 variable "environment_name" {
   default     = "consul"
@@ -58,6 +54,11 @@ variable "network_cidrs_private" {
     "172.31.64.0/20",
     "172.31.80.0/20",
   ]
+}
+
+variable "cluster_size" {
+  default     = "3"
+  description = "Number of instances to launch in the cluster"
 }
 
 variable "consul_datacenter" {
