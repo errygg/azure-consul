@@ -1,5 +1,5 @@
 resource "azurerm_virtual_machine" "consul" {
-  count = "${length(var.network_cidrs_private)}"
+  count = "${var.cluster_size}"
 
   name                  = "${var.consul_datacenter}-${count.index}"
   location              = "${var.location}"
@@ -47,7 +47,7 @@ resource "azurerm_virtual_machine" "consul" {
 }
 
 resource "azurerm_network_interface" "consul" {
-  count = "${length(var.network_cidrs_private)}"
+  count = "${var.cluster_size}"
 
   name                = "${var.consul_datacenter}-${count.index}"
   location            = "${var.location}"
