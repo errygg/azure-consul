@@ -57,7 +57,7 @@ variable "network_cidrs_private" {
 }
 
 variable "cluster_size" {
-  default     = "1"
+  default     = "3"
   description = "Number of instances to launch in the cluster"
 }
 
